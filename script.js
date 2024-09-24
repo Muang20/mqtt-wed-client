@@ -26,11 +26,14 @@ client.on('connect', function () {
 // รับข้อความจาก topic ที่สมัครสมาชิก และแสดงผลในหน้าเว็บ
 client.on('message', function (topic, message) {
     const data = message.toString();
-    displayLog(`Received message: ${data} from topic: ${topic}`);
-
-    // แสดงข้อมูลในหน้าเว็บ
-    const mqttDataDiv = document.getElementById('mqtt-data');
-    const newMessage = document.createElement('p');
-    newMessage.textContent = `Topic: ${topic}, Message: ${data}`;
-    mqttDataDiv.appendChild(newMessage);
+    
+    // กรองเอาเฉพาะตัวเลขจากข้อความ
+    const numberData = parseFloat(data);
+    
+    // แสดงข้อมูลที่เป็นตัวเลขเท่านั้น
+    if (!isNaN(numberData)) {
+        displayLog(`Number: ${numberData}`);
+    } else {
+        displayLog(`Received non-numeric message: ${data}`);
+    }
 });
