@@ -32,8 +32,6 @@ client.on('message', function (topic, message) {
     
     // แสดงข้อมูลที่เป็นตัวเลขเท่านั้น
     if (!isNaN(numberData)) {
-        displayLog(`Number: ${numberData}`);
-    } else {
-        displayLog(`Received non-numeric message: ${data}`);
+        displayLog(numberData); // แสดงเฉพาะตัวเลข
     }
 });
