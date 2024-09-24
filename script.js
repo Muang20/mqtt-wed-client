@@ -21,13 +21,14 @@ setStatus('mqtt-status', 'connecting');
 // เมื่อเชื่อมต่อสำเร็จ
 client.on('connect', function () {
     setStatus('mqtt-status', 'connected'); // แสดงไฟสีเขียว
-    displayLog('Connected to MQTT broker');
+    displayLog('');  // ลบข้อความเชื่อมต่อซ้ำ
+    displayLog('');  // ลบข้อความเชื่อมต่อซ้ำ
     
     // สมัครสมาชิกกับ topic ที่ต้องการรับข้อมูล
     client.subscribe('TestMuang/#', function (err) {
         if (!err) {
             setStatus('subscribe-status', 'connected'); // แสดงไฟสีเขียวเมื่อ subscribe สำเร็จ
-            displayLog('Subscribed to topic TestMuang/#');
+            displayLog(''); // ลบข้อความเชื่อมต่อซ้ำ
         } else {
             setStatus('subscribe-status', 'error'); // แสดงไฟสีแดงหากสมัครสมาชิกไม่สำเร็จ
             displayLog('Subscription error: ' + err);
