@@ -5,9 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MQTT Web Client</title>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <style>
+        .status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .status.connected {
+            background-color: green;
+        }
+        .status.connecting {
+            background-color: yellow;
+        }
+        .status.error {
+            background-color: red;
+        }
+    </style>
 </head>
 <body>
     <h1>ข้อมูลจาก MQTT Broker</h1>
+    
+    <p><span class="status" id="mqtt-status"></span>Connected to MQTT broker</p>
+    <p><span class="status" id="subscribe-status"></span>Subscribed to topic TestMuang/#</p>
+
+    <h3>Net Radiation: <span id="net-radiation">N/A</span></h3>
+
     <div id="mqtt-data"></div>
 
     <script src="script.js"></script>
