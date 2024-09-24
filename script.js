@@ -32,6 +32,6 @@ client.on('message', function (topic, message) {
     
     // แสดงข้อมูลที่เป็นตัวเลขเท่านั้น
     if (!isNaN(numberData)) {
-        displayLog(numberData); // แสดงเฉพาะตัวเลข
+        displayLog(`Net Radiation: ${numberData}`); // แสดงข้อความและตัวเลข
     }
 });
