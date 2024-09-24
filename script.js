@@ -1,5 +1,5 @@
-// เชื่อมต่อกับ MQTT broker ผ่าน WebSocket
-const client = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
+// เชื่อมต่อกับ MQTT broker ผ่าน WebSocket ที่ใช้ SSL (wss)
+const client = mqtt.connect('wss://mqtt-dashboard.com:8884/mqtt');
 
 // เมื่อเชื่อมต่อสำเร็จ
 client.on('connect', function () {
@@ -9,6 +9,8 @@ client.on('connect', function () {
     client.subscribe('TestMuang/#', function (err) {
         if (!err) {
             console.log('Subscribed to topic TestMuang/#');
+        } else {
+            console.log('Subscription error:', err);
         }
     });
 });
