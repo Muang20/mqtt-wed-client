@@ -4,7 +4,7 @@ const client = mqtt.connect('wss://mqtt-dashboard.com:8884/mqtt');
 // เมื่อเชื่อมต่อสำเร็จ
 client.on('connect', function () {
     console.log('Connected to MQTT broker');
-    
+
     // สมัครสมาชิกกับ topic ที่ต้องการรับข้อมูล
     client.subscribe('TestMuang/#', function (err) {
         if (!err) {
