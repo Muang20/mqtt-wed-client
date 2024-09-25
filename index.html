@@ -1,31 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MQTT Web Client</title>
-  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-  <style>
-    /* CSS สำหรับกำหนดขนาดตัวอักษรของข้อมูล Net Radiation */
-    #mqtt-data p {
-        font-size: 16px; /* ปรับขนาดให้เหมาะสม */
-        font-family: 'Arial', sans-serif; /* สามารถเปลี่ยนฟอนต์ได้ตามต้องการ */
-        color: black; /* สีของข้อความ */
-    }
-    /* กำหนด CSS สำหรับไฟสถานะ */
-    .status {
-        height: 15px;
-        width: 15px;
-        display: inline-block;
-        border-radius: 50%;
-        margin-left: 10px;
-    }
-    .connected {
-        background-color: green;
-    }
-    .error {
-        background-color: red;
-    }
-    .connecting {
-        background-color: yellow;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Web Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+        }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .connected {
+            background-color: green;
+        }
+        .disconnected {
+            background-color: red;
+        }
+        .pending {
+            background-color: yellow;
+        }
+        #netRadiation {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .message {
+            font-size: 1em;
+            color: gray;
+        }
+    </style>
 </head>
+<body>
+
+<h1>ข้อมูลจาก SenSor01</h1>
+
+<div class="status">
+    <div id="brokerStatus" class="status-indicator disconnected"></div>
+    <span id="brokerText">Connecting to MQTT broker...</span>
+</div>
+
+<div class="status">
+    <div id="topicStatus" class="status-indicator disconnected"></div>
+    <span id="topicText">Subscribing to topic...</span>
+</div>
+
+<h2>Net Radiation: <span id="netRadiation">N/A</span></h2>
+
+<div id="messages"></div>
+
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
