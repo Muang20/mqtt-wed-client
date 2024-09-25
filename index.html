@@ -7,19 +7,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: white; /* พื้นหลังของเนื้อหาด้านล่าง */
-            color: black; /* สีตัวหนังสือหลัก */
-        }
-        header {
-            background-color: black; /* พื้นหลังสีดำสำหรับส่วนบน */
-            color: white; /* สีตัวหนังสือเป็นสีขาว */
-            padding: 20px;
-            text-align: center;
+            background-color: black; /* สีพื้นหลัง */
+            color: white; /* สีตัวหนังสือ */
         }
         .status {
             display: flex;
             align-items: center;
-            color: white; /* สีตัวหนังสือของสถานะเป็นสีขาว */
         }
         .status-indicator {
             width: 10px;
@@ -40,82 +33,85 @@
             font-size: 1.2em;
             font-weight: bold;
         }
-        .message {
-            font-size: 0.6em;
-            color: gray;
+        /* กำหนดกรอบสำหรับข้อความ */
+        #messages {
+            font-size: 0.8em;
+            color: white;
+            border: 2px solid white;
+            padding: 10px;
+            height: 300px; /* ความสูงของกรอบเพื่อแสดงผลประมาณ 20 บรรทัด */
+            overflow-y: auto; /* ทำให้สามารถเลื่อนขึ้นลงได้ */
+            background-color: black;
         }
-        .line {
-            border-top: 2px solid red; /* เส้นสีแดงที่คุณต้องการ */
-            margin: 20px 0;
+        .message {
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>ข้อมูลจาก SenSor001</h1>
-    <div class="status">
-        <div id="brokerStatus" class="status-indicator disconnected"></div>
-        <span id="brokerText">Connecting to MQTT broker...</span>
-    </div>
+<h1>ข้อมูลจาก SenSor001</h1>
 
-    <div class="status">
-        <div id="topicStatus" class="status-indicator disconnected"></div>
-        <span id="topicText">Subscribing to topic...</span>
-    </div>
-</header>
+<div class="status">
+    <div id="brokerStatus" class="status-indicator disconnected"></div>
+    <span id="brokerText">Connecting to MQTT broker...</span>
+</div>
 
-<div class="line"></div> <!-- เส้นแดงแบ่งส่วน -->
+<div class="status">
+    <div id="topicStatus" class="status-indicator disconnected"></div>
+    <span id="topicText">Subscribing to topic...</span>
+</div>
 
 <h2>Net Radiation: <span id="netRadiation">N/A</span></h2>
 
+<!-- กรอบแสดงข้อความ MQTT -->
 <div id="messages"></div>
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <script>
-// เชื่อมต่อกับ MQTT broker โดยเปิดใช้งาน SSL
-const client = mqtt.connect('wss://mqtt-dashboard.com:8884/mqtt', {
-    protocol: 'wss',
-    rejectUnauthorized: false  // ไม่ตรวจสอบ SSL certificate เพื่อความปลอดภัยของการเชื่อมต่อ
-});
+    const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
-// เมื่อเชื่อมต่อสำเร็จ
-client.on('connect', function () {
-    document.getElementById('brokerStatus').classList.remove('disconnected');
-    document.getElementById('brokerStatus').classList.add('connected');
-    document.getElementById('brokerText').innerText = 'Connected to MQTT broker';
+    // เมื่อเชื่อมต่อสำเร็จ
+    client.on('connect', function () {
+        document.getElementById('brokerStatus').classList.remove('disconnected');
+        document.getElementById('brokerStatus').classList.add('connected');
+        document.getElementById('brokerText').innerText = 'Connected to MQTT broker';
 
-    client.subscribe('TestMuang/#', function (err) {
-        if (!err) {
-            document.getElementById('topicStatus').classList.remove('disconnected');
-            document.getElementById('topicStatus').classList.add('connected');
-            document.getElementById('topicText').innerText = 'Subscribed to topic TestMuang/#';
-        } else {
-            document.getElementById('topicText').innerText = 'Failed to subscribe to topic';
-            document.getElementById('topicStatus').classList.add('disconnected');
-        }
+        client.subscribe('TestMuang/#', function (err) {
+            if (!err) {
+                document.getElementById('topicStatus').classList.remove('disconnected');
+                document.getElementById('topicStatus').classList.add('connected');
+                document.getElementById('topicText').innerText = 'Subscribed to topic TestMuang/#';
+            } else {
+                document.getElementById('topicText').innerText = 'Failed to subscribe to topic';
+                document.getElementById('topicStatus').classList.add('disconnected');
+            }
+        });
     });
-});
 
-// เมื่อมีข้อความเข้ามา
-client.on('message', function (topic, message) {
-    const netRadiation = message.toString();
-    const currentTime = new Date().toLocaleTimeString();
+    // เมื่อมีข้อความเข้ามา
+    client.on('message', function (topic, message) {
+        const netRadiation = message.toString();
+        const currentTime = new Date().toLocaleTimeString();
 
-    document.getElementById('netRadiation').innerText = netRadiation;
+        document.getElementById('netRadiation').innerText = netRadiation;
 
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message';
-    messageDiv.innerText = `(${currentTime}) Net Radiation: ${netRadiation}`;
-    document.getElementById('messages').appendChild(messageDiv);
-});
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message';
+        messageDiv.innerText = `(${currentTime}) Net Radiation: ${netRadiation}`;
+        document.getElementById('messages').appendChild(messageDiv);
 
-// ตรวจจับการเชื่อมต่อหลุด
-client.on('offline', function () {
-    document.getElementById('brokerStatus').classList.remove('connected');
-    document.getElementById('brokerStatus').classList.add('disconnected');
-    document.getElementById('brokerText').innerText = 'Disconnected from MQTT broker';
-});
+        // เลื่อนหน้าจอลงอัตโนมัติเมื่อมีข้อความใหม่
+        const messageContainer = document.getElementById('messages');
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    });
+
+    // ตรวจจับการเชื่อมต่อหลุด
+    client.on('offline', function () {
+        document.getElementById('brokerStatus').classList.remove('connected');
+        document.getElementById('brokerStatus').classList.add('disconnected');
+        document.getElementById('brokerText').innerText = 'Disconnected from MQTT broker';
+    });
 </script>
 
 </body>
