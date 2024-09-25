@@ -1,4 +1,4 @@
-const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
+const client = mqtt.connect('wss://mqtt-dashboard.com:8884/mqtt');
 
 // เมื่อเชื่อมต่อสำเร็จ
 client.on('connect', function () {
