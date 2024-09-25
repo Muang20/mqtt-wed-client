@@ -3,74 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MQTT and Weather Info</title>
+    <title>MQTT Web Client</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: black;
+            background-color: black; /* สีพื้นหลัง */
+            color: white; /* สีตัวหนังสือ */
+        }
+        .status {
+            display: flex;
+            align-items: center;
+        }
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .connected {
+            background-color: green;
+        }
+        .disconnected {
+            background-color: red;
+        }
+        .pending {
+            background-color: yellow;
+        }
+        #netRadiation {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        /* กำหนดกรอบสำหรับข้อความ */
+        #messages {
+            font-size: 0.8em;
             color: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 20px;
-        }
-
-        .container {
-            display: flex;
-        }
-
-        .box {
-            width: 300px;
-            height: 300px;
             border: 2px solid white;
             padding: 10px;
-            margin: 10px;
-            overflow-y: auto;
+            width: 40ch; /* ความกว้างของกรอบพอสำหรับ 40 ตัวอักษร */
+            height: 300px; /* ความสูงของกรอบเพื่อแสดงผลประมาณ 20 บรรทัด */
+            overflow-y: auto; /* ทำให้สามารถเลื่อนขึ้นลงได้ */
+            background-color: black;
         }
-
-        .weather-info {
-            font-size: 1em;
-            margin-bottom: 10px;
-        }
-
         .message {
-            font-size: 1em;
-            color: gray;
-            margin-bottom: 5px;
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- MQTT Box -->
-    <div class="box" id="mqttBox">
-        <h2>ข้อมูลจาก MQTT</h2>
-        <h3>Net Radiation: <span id="netRadiation">N/A</span></h3>
-        <div id="mqttMessages"></div>
-    </div>
+<h1>ข้อมูลจาก SenSor001</h1>
 
-    <!-- OpenWeatherMap Box -->
-    <div class="box" id="weatherBox">
-        <h2>ข้อมูลสภาพอากาศ</h2>
-        <div id="weather">
-            กำลังโหลดข้อมูล...
-        </div>
-    </div>
+<div class="status">
+    <div id="brokerStatus" class="status-indicator disconnected"></div>
+    <span id="brokerText">Connecting to MQTT broker...</span>
 </div>
+
+<div class="status">
+    <div id="topicStatus" class="status-indicator disconnected"></div>
+    <span id="topicText">Subscribing to topic...</span>
+</div>
+
+<h2>Net Radiation: <span id="netRadiation">N/A</span></h2>
+
+<!-- กรอบแสดงข้อความ MQTT -->
+<div id="messages"></div>
 
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <script>
-    // เชื่อมต่อ MQTT
     const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
+    // เมื่อเชื่อมต่อสำเร็จ
     client.on('connect', function () {
+        document.getElementById('brokerStatus').classList.remove('disconnected');
+        document.getElementById('brokerStatus').classList.add('connected');
+        document.getElementById('brokerText').innerText = 'Connected to MQTT broker';
+
         client.subscribe('TestMuang/#', function (err) {
             if (!err) {
-                console.log('Subscribed to topic');
+                document.getElementById('topicStatus').classList.remove('disconnected');
+                document.getElementById('topicStatus').classList.add('connected');
+                document.getElementById('topicText').innerText = 'Subscribed to topic TestMuang/#';
+            } else {
+                document.getElementById('topicText').innerText = 'Failed to subscribe to topic';
+                document.getElementById('topicStatus').classList.add('disconnected');
             }
         });
     });
 
+    // เมื่อมีข้อความเข้ามา
     client.on('message', function (topic, message) {
         const netRadiation = message.toString();
         const currentTime = new Date().toLocaleTimeString();
@@ -80,35 +100,19 @@
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message';
         messageDiv.innerText = `(${currentTime}) Net Radiation: ${netRadiation}`;
-        document.getElementById('mqttMessages').appendChild(messageDiv);
+        document.getElementById('messages').appendChild(messageDiv);
+
+        // เลื่อนหน้าจอลงอัตโนมัติเมื่อมีข้อความใหม่
+        const messageContainer = document.getElementById('messages');
+        messageContainer.scrollTop = messageContainer.scrollHeight;
     });
 
-    // OpenWeatherMap API
-    const apiKey = '39994448216c7e3e51aa74516c14949f'; // ใส่ API Key ของคุณ
-    const city = 'Bangkok'; // ใส่ชื่อเมือง
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-    async function getWeatherData() {
-        try {
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-
-            const weatherInfo = `
-                <div class="weather-info">เมือง: ${data.name}</div>
-                <div class="weather-info">อุณหภูมิ: ${data.main.temp}°C</div>
-                <div class="weather-info">ความชื้น: ${data.main.humidity}%</div>
-                <div class="weather-info">ความเร็วลม: ${data.wind.speed} m/s</div>
-                <div class="weather-info">สภาพอากาศ: ${data.weather[0].description}</div>
-            `;
-
-            document.getElementById('weather').innerHTML = weatherInfo;
-        } catch (error) {
-            document.getElementById('weather').innerHTML = 'ไม่สามารถดึงข้อมูลได้';
-            console.error('Error:', error);
-        }
-    }
-
-    getWeatherData();
+    // ตรวจจับการเชื่อมต่อหลุด
+    client.on('offline', function () {
+        document.getElementById('brokerStatus').classList.remove('connected');
+        document.getElementById('brokerStatus').classList.add('disconnected');
+        document.getElementById('brokerText').innerText = 'Disconnected from MQTT broker';
+    });
 </script>
 
 </body>
