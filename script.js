@@ -1,63 +1,39 @@
-// ฟังก์ชันสำหรับเปลี่ยนสถานะไฟ
-function setStatus(elementId, status) {
-    const element = document.getElementById(elementId);
-    element.className = `status ${status}`;
-}
-
-// ฟังก์ชันสำหรับแสดงข้อมูลบนหน้าเว็บแทน console
-function displayLog(message) {
-    const logDiv = document.getElementById('mqtt-data');
-    const newLog = document.createElement('p');
-    newLog.textContent = message;
-    logDiv.appendChild(newLog);
-}
-
-// เชื่อมต่อกับ MQTT broker ผ่าน WebSocket
-const client = mqtt.connect('wss://mqtt-dashboard.com:8884/mqtt');
-
-// ขณะรอการเชื่อมต่อ แสดงไฟสีเหลือง
-setStatus('mqtt-status', 'connecting');
+const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
 // เมื่อเชื่อมต่อสำเร็จ
 client.on('connect', function () {
-    setStatus('mqtt-status', 'connected'); // แสดงไฟสีเขียว
-    displayLog('');  // ลบข้อความเชื่อมต่อซ้ำ
-    displayLog('');  // ลบข้อความเชื่อมต่อซ้ำ
-    
-    // สมัครสมาชิกกับ topic ที่ต้องการรับข้อมูล
+    document.getElementById('brokerStatus').classList.remove('disconnected');
+    document.getElementById('brokerStatus').classList.add('connected');
+    document.getElementById('brokerText').innerText = 'Connected to MQTT broker';
+
     client.subscribe('TestMuang/#', function (err) {
         if (!err) {
-            setStatus('subscribe-status', 'connected'); // แสดงไฟสีเขียวเมื่อ subscribe สำเร็จ
-            displayLog(''); // ลบข้อความเชื่อมต่อซ้ำ
+            document.getElementById('topicStatus').classList.remove('disconnected');
+            document.getElementById('topicStatus').classList.add('connected');
+            document.getElementById('topicText').innerText = 'Subscribed to topic TestMuang/#';
         } else {
-            setStatus('subscribe-status', 'error'); // แสดงไฟสีแดงหากสมัครสมาชิกไม่สำเร็จ
-            displayLog('Subscription error: ' + err);
+            document.getElementById('topicText').innerText = 'Failed to subscribe to topic';
+            document.getElementById('topicStatus').classList.add('disconnected');
         }
     });
 });
 
-// เมื่อการเชื่อมต่อเกิดปัญหา
-client.on('error', function () {
-    setStatus('mqtt-status', 'error'); // แสดงไฟสีแดง
-    displayLog('Error: Could not connect to MQTT broker');
+// เมื่อมีข้อความเข้ามา
+client.on('message', function (topic, message) {
+    const netRadiation = message.toString();
+    const currentTime = new Date().toLocaleTimeString();
+
+    document.getElementById('netRadiation').innerText = netRadiation;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message';
+    messageDiv.innerText = `(${currentTime}) Net Radiation: ${netRadiation}`;
+    document.getElementById('messages').appendChild(messageDiv);
 });
 
-// รับข้อความจาก topic ที่สมัครสมาชิก และแสดงผลในหน้าเว็บ
-client.on('message', function (topic, message) {
-    const data = message.toString();
-    
-    // กรองเอาเฉพาะตัวเลขจากข้อความ
-    const numberData = parseFloat(data);
-    
-    // แสดงข้อมูลที่เป็นตัวเลขเท่านั้น
-    if (!isNaN(numberData)) {
-        // ดึงข้อมูลเวลา
-        const currentTime = new Date().toLocaleTimeString();
-
-        // อัปเดตส่วนที่แสดงค่า Net Radiation บนหน้าเว็บ
-        document.getElementById('net-radiation').textContent = numberData;
-
-        // แสดงข้อมูลบนเว็บพร้อมเวลา
-        displayLog(`(${currentTime}) Net Radiation: ${numberData}`);
-    }
+// ตรวจจับการเชื่อมต่อหลุด
+client.on('offline', function () {
+    document.getElementById('brokerStatus').classList.remove('connected');
+    document.getElementById('brokerStatus').classList.add('disconnected');
+    document.getElementById('brokerText').innerText = 'Disconnected from MQTT broker';
 });
