@@ -1,6 +1,5 @@
-/* ปรับขนาดของข้อความในส่วนที่แสดงค่าจาก MQTT */
-p {
-  font-size: 16px; /* ปรับขนาดตัวอักษรให้เหมาะสม */
-  font-family: 'Arial', sans-serif; /* ฟอนต์ที่เลือกใช้ */
-  color: black; /* สีของข้อความ */
+.message {
+    font-size: 1em; /* กำหนดขนาดตัวอักษร */
+    color: gray;
+    font-family: Arial, sans-serif;
 }
