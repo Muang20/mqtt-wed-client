@@ -1,31 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MQTT Web Client</title>
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
   <style>
-    .status {
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-left: 10px;
+    /* CSS สำหรับกำหนดขนาดตัวอักษรของข้อมูล Net Radiation */
+    #mqtt-data p {
+        font-size: 16px; /* ปรับขนาดให้เหมาะสม */
+        font-family: 'Arial', sans-serif; /* สามารถเปลี่ยนฟอนต์ได้ตามต้องการ */
+        color: black; /* สีของข้อความ */
     }
-    .status.connected { background-color: green; }
-    .status.connecting { background-color: yellow; }
-    .status.error { background-color: red; }
+    /* กำหนด CSS สำหรับไฟสถานะ */
+    .status {
+        height: 15px;
+        width: 15px;
+        display: inline-block;
+        border-radius: 50%;
+        margin-left: 10px;
+    }
+    .connected {
+        background-color: green;
+    }
+    .error {
+        background-color: red;
+    }
+    .connecting {
+        background-color: yellow;
+    }
   </style>
 </head>
-<body>
-  <h1>ข้อมูลจากSenSor01</h1>
-  <p>Connected to MQTT broker <span id="mqtt-status" class="status"></span></p>
-  <p>Subscribed to topic TestMuang/# <span id="subscribe-status" class="status"></span></p>
-  <h2>Net Radiation: <span id="net-radiation">N/A</span></h2>
-
-  <div id="mqtt-data"></div>
-
-  <script src="script.js"></script>
-</body>
-</html>
