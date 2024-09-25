@@ -1,63 +1,39 @@
-// Update the broker status
-const brokerStatusDiv = document.getElementById('brokerStatus');
-const brokerText = document.getElementById('brokerText');
+const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
-// Update the topic subscription status
-const topicStatusDiv = document.getElementById('topicStatus');
-const topicText = document.getElementById('topicText');
-
-// Update Net Radiation
-const netRadiationSpan = document.getElementById('netRadiation');
-
-// Display messages
-const messagesDiv = document.getElementById('messages');
-
-// Function to update connection status
-function updateConnectionStatus(connected) {
-    if (connected) {
-        brokerStatusDiv.className = 'status-indicator connected';
-        brokerText.textContent = 'Connected to MQTT broker';
-    } else {
-        brokerStatusDiv.className = 'status-indicator disconnected';
-        brokerText.textContent = 'Disconnected from MQTT broker';
-    }
-}
-
-// Function to update topic subscription status
-function updateTopicStatus(subscribed) {
-    if (subscribed) {
-        topicStatusDiv.className = 'status-indicator connected';
-        topicText.textContent = 'Subscribed to topic TestMuang/#';
-    } else {
-        topicStatusDiv.className = 'status-indicator disconnected';
-        topicText.textContent = 'Not subscribed to topic';
-    }
-}
-
-// Function to display new Net Radiation data
-function displayNetRadiation(data, time) {
-    netRadiationSpan.textContent = data;
-    
-    const p = document.createElement('p');
-    p.className = 'message';
-    p.innerText = `(${time}) Net Radiation: ${data}`;
-    messagesDiv.appendChild(p);
-}
-
-// Example usage with MQTT connection
-const client = mqtt.connect('wss://mqtt-broker-url');
-
+// เมื่อเชื่อมต่อสำเร็จ
 client.on('connect', function () {
-    updateConnectionStatus(true);
+    document.getElementById('brokerStatus').classList.remove('disconnected');
+    document.getElementById('brokerStatus').classList.add('connected');
+    document.getElementById('brokerText').innerText = 'Connected to MQTT broker';
+
     client.subscribe('TestMuang/#', function (err) {
         if (!err) {
-            updateTopicStatus(true);
+            document.getElementById('topicStatus').classList.remove('disconnected');
+            document.getElementById('topicStatus').classList.add('connected');
+            document.getElementById('topicText').innerText = 'Subscribed to topic TestMuang/#';
+        } else {
+            document.getElementById('topicText').innerText = 'Failed to subscribe to topic';
+            document.getElementById('topicStatus').classList.add('disconnected');
         }
     });
 });
 
+// เมื่อมีข้อความเข้ามา
 client.on('message', function (topic, message) {
-    const data = message.toString();
-    const time = new Date().toLocaleTimeString();
-    displayNetRadiation(data, time);
+    const netRadiation = message.toString();
+    const currentTime = new Date().toLocaleTimeString();
+
+    document.getElementById('netRadiation').innerText = netRadiation;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message';
+    messageDiv.innerText = `(${currentTime}) Net Radiation: ${netRadiation}`;
+    document.getElementById('messages').appendChild(messageDiv);
+});
+
+// ตรวจจับการเชื่อมต่อหลุด
+client.on('offline', function () {
+    document.getElementById('brokerStatus').classList.remove('connected');
+    document.getElementById('brokerStatus').classList.add('disconnected');
+    document.getElementById('brokerText').innerText = 'Disconnected from MQTT broker';
 });
