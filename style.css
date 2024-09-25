@@ -1,0 +1,6 @@
+/* กำหนดขนาดตัวอักษรของข้อมูล Net Radiation */
+#mqtt-data p {
+    font-size: 16px; /* ปรับขนาดให้เหมาะสม */
+    font-family: 'Arial', sans-serif; /* สามารถเปลี่ยนฟอนต์ได้ตามต้องการ */
+    color: black; /* สีของข้อความ */
+}
