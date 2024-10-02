@@ -38,7 +38,7 @@ function calculateETo(netRadiation) {
 }
 
 function fetchWeatherData(city) {
-    const apiKey = 'YOUR_API_KEY';
+    const apiKey = '39994448216c7e3e51aa74516c14949f';
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
 
     fetch(apiUrl)
