@@ -3,38 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETo Calculation</title>
+    <title>ค่า ETo</title>
     <style>
         body {
-            background-color: #ffcccb;
             font-family: Arial, sans-serif;
+            background-color: pink;
+            color: black;
             text-align: center;
         }
         h1 {
             font-size: 2.5em;
         }
-        .eto-box {
-            background-color: #f8a5a5;
-            padding: 20px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-top: 50px;
-            font-size: 1.5em;
+        .container {
+            display: flex;
+            justify-content: space-around;
+        }
+        .box {
+            border: 1px solid black;
+            padding: 10px;
+            width: 200px;
+            height: 300px;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
-    <h1>ค่า ETO</h1>
-    <div class="eto-box">
-        Sensor 01<br>
-        ETo = <span id="etoValue">N/A</span> มม./วัน
+
+    <h1>ค่า ETo</h1>
+
+    <div class="container">
+        <div class="box">
+            <h3>ข้อมูลจาก MQTT</h3>
+            <div id="messages"></div>
+        </div>
+        
+        <div class="box">
+            <h3>ข้อมูลสภาพอากาศ</h3>
+            <div class="weather-info">
+                <p>เมือง: <span id="cityName">Bangkok</span></p>
+                <p>อุณหภูมิ: <span id="temperature">N/A</span>°C</p>
+                <p>ความชื้น: <span id="humidity">N/A</span>%</p>
+                <p>ความเร็วลม: <span id="windSpeed">N/A</span> m/s</p>
+                <p>สภาพอากาศ: <span id="weatherDescription">N/A</span></p>
+            </div>
+        </div>
+
+        <div class="box">
+            <h3>ค่า ETo</h3>
+            <p>ETo = <span id="etoValue">N/A</span> มม./วัน</p>
+        </div>
     </div>
-    
-    <script>
-        // ตัวอย่างการคำนวณค่า ETo โดยใช้ข้อมูล Net Radiation จาก MQTT
-        const netRadiation = 5; // ค่าจำลองจาก MQTT
-        const eto = netRadiation * 0.408; // สูตรจำลอง
-        document.getElementById('etoValue').innerText = eto.toFixed(2);
-    </script>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="script.js"></script>
+
 </body>
 </html>
