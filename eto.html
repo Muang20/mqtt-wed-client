@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETo Calculation</title>
+    <style>
+        body {
+            background-color: #ffcccb;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+        }
+        .eto-box {
+            background-color: #f8a5a5;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 50px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>ค่า ETO</h1>
+    <div class="eto-box">
+        Sensor 01<br>
+        ETo = <span id="etoValue">N/A</span> มม./วัน
+    </div>
+    
+    <script>
+        // ตัวอย่างการคำนวณค่า ETo โดยใช้ข้อมูล Net Radiation จาก MQTT
+        const netRadiation = 5; // ค่าจำลองจาก MQTT
+        const eto = netRadiation * 0.408; // สูตรจำลอง
+        document.getElementById('etoValue').innerText = eto.toFixed(2);
+    </script>
+</body>
+</html>
