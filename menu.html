@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Menu</title>
+    <style>
+        body {
+            background-color: #003366;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: white;
+        }
+        h1 {
+            font-size: 2.5em;
+        }
+        .menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            justify-items: center;
+            margin-top: 50px;
+        }
+        .menu-item {
+            background-color: #00509e;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: background-color 0.3s;
+        }
+        .menu-item:hover {
+            background-color: #0073e6;
+        }
+    </style>
+</head>
+<body>
+    <h1>MENU</h1>
+    <div class="menu">
+        <div class="menu-item" onclick="location.href='eto.html'">ข้อมูลค่า ETO</div>
+        <div class="menu-item" onclick="location.href='weather.html'">ข้อมูลจากสถานีตรวจวัดอากาศ</div>
+    </div>
+</body>
+</html>
