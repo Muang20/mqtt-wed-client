@@ -3,34 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าแรก - Sensor 01</title>
+    <title>MQTT Web Client</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #87CEEB;
-            color: #004080;
+            background-color: #1E3A5F;
+            color: white;
             text-align: center;
         }
         h1 {
-            font-size: 2.5em;
+            font-size: 2em;
         }
-        .menu-button {
-            padding: 10px 20px;
-            background-color: #004080;
-            color: white;
-            border: none;
-            border-radius: 5px;
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .status-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .connected {
+            background-color: green;
+        }
+        .disconnected {
+            background-color: red;
+        }
+        .menu-item {
+            display: inline-block;
+            background-color: #007ACC;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 10px;
             cursor: pointer;
+            color: white;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
     <h1>ข้อมูลจาก Sensor 01</h1>
-    <p>Connected to MQTT broker</p>
-    <p>Subscribed to topic TestMuang/#</p>
 
-    <button class="menu-button" onclick="window.location.href='menu.html'">MENU</button>
+    <div class="status">
+        <div id="brokerStatus" class="status-indicator disconnected"></div>
+        <span id="brokerText">Connecting to MQTT broker...</span>
+    </div>
+
+    <div class="status">
+        <div id="topicStatus" class="status-indicator disconnected"></div>
+        <span id="topicText">Subscribing to topic TestMuang/#...</span>
+    </div>
+
+    <div>
+        <a href="menu.html" class="menu-item">MENU</a>
+    </div>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
