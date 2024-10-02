@@ -3,70 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MQTT Sensor Data</title>
+    <title>หน้าแรก - Sensor 01</title>
     <style>
         body {
-            background-color: #a1d8ff;
             font-family: Arial, sans-serif;
+            background-color: #87CEEB;
+            color: #004080;
             text-align: center;
         }
         h1 {
-            font-size: 3em;
-            color: #00254a;
+            font-size: 2.5em;
         }
-        #menuButton {
-            background-color: #0066cc;
+        .menu-button {
+            padding: 10px 20px;
+            background-color: #004080;
             color: white;
-            padding: 15px;
             border: none;
-            font-size: 1.5em;
             border-radius: 5px;
             cursor: pointer;
-        }
-        #menuButton:hover {
-            background-color: #004b99;
-        }
-        .status {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .status-indicator {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .connected {
-            background-color: green;
-        }
-        .disconnected {
-            background-color: red;
         }
     </style>
 </head>
 <body>
+
     <h1>ข้อมูลจาก Sensor 01</h1>
-    <div class="status">
-        <div id="mqttStatus" class="status-indicator disconnected"></div>
-        <span id="statusText">Connecting to MQTT broker...</span>
-    </div>
-    <br>
-    <button id="menuButton" onclick="location.href='menu.html'">MENU</button>
-    
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-    <script>
-        const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
-        client.on('connect', function () {
-            document.getElementById('mqttStatus').classList.remove('disconnected');
-            document.getElementById('mqttStatus').classList.add('connected');
-            document.getElementById('statusText').innerText = 'Connected to MQTT broker';
-        });
-        client.on('offline', function () {
-            document.getElementById('mqttStatus').classList.remove('connected');
-            document.getElementById('mqttStatus').classList.add('disconnected');
-            document.getElementById('statusText').innerText = 'Disconnected from MQTT broker';
-        });
-    </script>
+    <p>Connected to MQTT broker</p>
+    <p>Subscribed to topic TestMuang/#</p>
+
+    <button class="menu-button" onclick="window.location.href='menu.html'">MENU</button>
+
 </body>
 </html>
