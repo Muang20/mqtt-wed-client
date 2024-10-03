@@ -28,6 +28,15 @@
         #etoChartContainer {
             margin-top: 50px;
         }
+        .graph-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        canvas {
+            max-width: 80%;
+            height: 300px;
+        }
     </style>
 </head>
 <body>
@@ -58,8 +67,8 @@
     </div>
 
     <!-- พื้นที่สำหรับกราฟ -->
-    <div id="etoChartContainer">
-        <canvas id="etoChart" width="400" height="200"></canvas>
+    <div class="graph-container">
+        <canvas id="etoChart" width="800" height="400"></canvas>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
