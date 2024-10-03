@@ -4,51 +4,6 @@ const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 // ตัวแปรสำหรับเก็บค่าที่ได้จาก MQTT
 let netRadiation = null;
 
-// กำหนดพื้นที่สำหรับกราฟ
-const ctx = document.getElementById('etoChart').getContext('2d');
-const etoChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: [],  // เวลา
-        datasets: [{
-            label: 'ค่า ETo',
-            data: [],  // ค่า ETo ที่คำนวณได้
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 2,
-            fill: false
-        }]
-    },
-    options: {
-        scales: {
-            x: {
-                type: 'time',
-                time: {
-                    unit: 'minute'
-                },
-                title: {
-                    display: true,
-                    text: 'เวลา'
-                }
-            },
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'ค่า ETo (มม./วัน)'
-                }
-            }
-        }
-    }
-});
-
-// อัปเดตกราฟด้วยค่าจาก ETo
-function updateEToChart(etoValue) {
-    const currentTime = new Date();
-    etoChart.data.labels.push(currentTime);  // เพิ่มเวลาในแกน X
-    etoChart.data.datasets[0].data.push(etoValue);  // เพิ่มค่า ETo ในแกน Y
-    etoChart.update();  // อัปเดตกราฟ
-}
-
 // เมื่อเชื่อมต่อสำเร็จ
 client.on('connect', function () {
     console.log('Connected to MQTT broker');
@@ -86,17 +41,17 @@ function calculateETo(netRadiation) {
     const humidity = parseFloat(document.getElementById('humidity').innerText);
     const windSpeed = parseFloat(document.getElementById('windSpeed').innerText);
 
+    // คำนวณค่า e_s และ e_a จากอุณหภูมิและความชื้น
     const e_s = 0.6108 * Math.exp((17.27 * temperature) / (temperature + 237.3));
     const e_a = e_s * (humidity / 100);
     const delta = (4098 * e_s) / Math.pow((temperature + 237.3), 2);
     const gamma = 0.0665;
 
+    // คำนวณค่า ETo จาก Net Radiation และข้อมูลอากาศ
     const ETo = (0.408 * delta * (netRadiation - 0) + gamma * (900 / (temperature + 273)) * windSpeed * (e_s - e_a)) / (delta + gamma * (1 + 0.34 * windSpeed));
-    
-    document.getElementById('etoValue').innerText = ETo.toFixed(2);
 
-    // อัปเดตกราฟด้วยค่า ETo ที่คำนวณได้
-    updateEToChart(ETo.toFixed(2));
+    // แสดงผลค่า ETo บนหน้าเว็บ
+    document.getElementById('etoValue').innerText = ETo.toFixed(2);
 }
 
 // ฟังก์ชันดึงข้อมูลสภาพอากาศจาก OpenWeather API
