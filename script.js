@@ -77,4 +77,4 @@ function fetchWeatherData(city) {
 }
 
 // เรียกฟังก์ชันเพื่อดึงข้อมูลสภาพอากาศ
-fetchWeatherData('Bangkok');
+fetchWeatherData('Danchang');
