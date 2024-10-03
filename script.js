@@ -86,13 +86,15 @@ function calculateETo(netRadiation) {
     const humidity = parseFloat(document.getElementById('humidity').innerText);
     const windSpeed = parseFloat(document.getElementById('windSpeed').innerText);
 
+    // คำนวณค่า e_s และ e_a จากอุณหภูมิและความชื้น
     const e_s = 0.6108 * Math.exp((17.27 * temperature) / (temperature + 237.3));
     const e_a = e_s * (humidity / 100);
     const delta = (4098 * e_s) / Math.pow((temperature + 237.3), 2);
     const gamma = 0.0665;
 
+    // คำนวณค่า ETo จาก Net Radiation และข้อมูลอากาศ
     const ETo = (0.408 * delta * (netRadiation - 0) + gamma * (900 / (temperature + 273)) * windSpeed * (e_s - e_a)) / (delta + gamma * (1 + 0.34 * windSpeed));
-    
+
     document.getElementById('etoValue').innerText = ETo.toFixed(2);
 
     // อัปเดตกราฟด้วยค่า ETo ที่คำนวณได้
