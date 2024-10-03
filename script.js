@@ -122,4 +122,4 @@ function fetchWeatherData(city) {
 }
 
 // เรียกฟังก์ชันเพื่อดึงข้อมูลสภาพอากาศ
-fetchWeatherData('Danchang');
+fetchWeatherData('Danchang);
