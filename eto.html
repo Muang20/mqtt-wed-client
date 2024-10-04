@@ -25,6 +25,15 @@
             height: 300px;
             overflow-y: auto;
         }
+        .graph-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        canvas {
+            max-width: 80%;
+            height: 300px;
+        }
     </style>
 </head>
 <body>
@@ -54,6 +63,12 @@
         </div>
     </div>
 
+    <!-- พื้นที่สำหรับกราฟ -->
+    <div class="graph-container">
+        <canvas id="etoChart" width="800" height="400"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="script.js"></script>
 
