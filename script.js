@@ -21,7 +21,7 @@ client.on('connect', function () {
         });
     } else if (document.title === 'ค่า ETo') {
         // สมัครสมาชิกสำหรับหน้า eto.html
-        client.subscribe('EToData/#', function (err) {
+        client.subscribe('TestMuang/#', function (err) {
             if (!err) {
                 console.log('Subscribed to ETo data');
                 document.getElementById('topicStatus').classList.remove('disconnected');
