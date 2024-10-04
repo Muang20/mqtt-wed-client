@@ -25,20 +25,33 @@
             height: 300px;
             overflow-y: auto;
         }
-        .graph-container {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
+        .status-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
-        canvas {
-            max-width: 80%;
-            height: 300px;
+        .connected {
+            background-color: green;
+        }
+        .disconnected {
+            background-color: red;
         }
     </style>
 </head>
 <body>
 
     <h1>ค่า ETo</h1>
+
+    <div class="status">
+        <div id="brokerStatus" class="status-indicator disconnected"></div>
+        <span id="brokerText">Connecting to MQTT broker...</span>
+    </div>
+
+    <div class="status">
+        <div id="topicStatus" class="status-indicator disconnected"></div>
+        <span id="topicText">Subscribing to topic EToData/#...</span>
+    </div>
 
     <div class="container">
         <div class="box">
@@ -63,12 +76,6 @@
         </div>
     </div>
 
-    <!-- พื้นที่สำหรับกราฟ -->
-    <div class="graph-container">
-        <canvas id="etoChart" width="800" height="400"></canvas>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script src="script.js"></script>
 
