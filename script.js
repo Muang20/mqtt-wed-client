@@ -1,7 +1,7 @@
 // เชื่อมต่อกับ MQTT broker สำหรับทั้งสองหน้า (index และ ETo)
 const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
-// เชื่อมต่อสำเร็จ
+// เมื่อเชื่อมต่อสำเร็จ
 client.on('connect', function () {
     console.log('Connected to MQTT broker');
     document.getElementById('brokerStatus').classList.remove('disconnected');
@@ -48,17 +48,19 @@ client.on('message', function (topic, message) {
 
     // ตรวจสอบว่าหน้าไหนกำลังทำงาน
     if (document.title === 'MQTT Web Client') {
+        // แสดงข้อมูลในหน้า index.html
         const mqttDataDiv = document.getElementById('mqtt-data');
         const newMessage = document.createElement('p');
         newMessage.textContent = `Topic: ${topic}, Message: ${data}`;
         mqttDataDiv.appendChild(newMessage);
     } else if (document.title === 'ค่า ETo') {
+        // แสดงข้อมูลในหน้า eto.html
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message';
         messageDiv.innerText = `(${currentTime}) Net Radiation: ${data}`;
         document.getElementById('messages').appendChild(messageDiv);
 
-        // เรียกใช้การคำนวณ ETo
+        // คำนวณค่า ETo
         calculateETo(data);
     }
 });
@@ -77,6 +79,16 @@ function calculateETo(netRadiation) {
     const ETo = (0.408 * delta * (netRadiation - 0) + gamma * (900 / (temperature + 273)) * windSpeed * (e_s - e_a)) / (delta + gamma * (1 + 0.34 * windSpeed));
     
     document.getElementById('etoValue').innerText = ETo.toFixed(2);
+
+    // เก็บข้อมูลใน LocalStorage
+    const currentTime = new Date().toLocaleTimeString();
+    const data = {
+        time: currentTime,
+        netRadiation: netRadiation,
+        etoValue: ETo.toFixed(2)
+    };
+
+    localStorage.setItem('mqttData', JSON.stringify(data));
 }
 
 // ฟังก์ชันดึงข้อมูลสภาพอากาศจาก API (ใช้ใน eto.html)
@@ -97,4 +109,19 @@ function fetchWeatherData(city) {
 }
 
 // เรียกฟังก์ชันดึงข้อมูลสภาพอากาศ
-fetchWeatherData('Danchang');
+if (document.title === 'ค่า ETo') {
+    fetchWeatherData('Danchang');
+}
+
+// ดึงข้อมูลจาก LocalStorage สำหรับหน้า mqtt.html
+if (document.title === 'ข้อมูลจาก MQTT') {
+    const storedData = JSON.parse(localStorage.getItem('mqttData'));
+
+    if (storedData) {
+        document.getElementById('mqttTime').innerText = storedData.time;
+        document.getElementById('mqttNetRadiation').innerText = storedData.netRadiation;
+        document.getElementById('mqttETo').innerText = storedData.etoValue;
+    } else {
+        console.log('No data found in LocalStorage');
+    }
+}
