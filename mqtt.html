@@ -11,8 +11,40 @@
             color: white;
             text-align: center;
         }
-        .data-container {
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid white;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007ACC;
+        }
+        td {
+            background-color: #1E3A5F;
+        }
+        .button-container {
             margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        #resetButton {
+            background-color: red;
+            color: white;
+            border: none;
+        }
+        #downloadButton {
+            background-color: green;
+            color: white;
+            border: none;
         }
     </style>
 </head>
@@ -20,12 +52,25 @@
 
     <h1>ข้อมูลจาก MQTT</h1>
 
-    <div class="data-container">
-        <h3>เวลา: <span id="mqttTime">N/A</span></h3>
-        <h3>Net Radiation: <span id="mqttNetRadiation">N/A</span></h3>
-        <h3>ค่า ETo: <span id="mqttETo">N/A</span></h3>
+    <table id="mqttTable">
+        <thead>
+            <tr>
+                <th>เวลา</th>
+                <th>Net Radiation</th>
+                <th>ค่า ETo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ข้อมูลจะถูกเพิ่มที่นี่ -->
+        </tbody>
+    </table>
+
+    <div class="button-container">
+        <button id="resetButton">รีเซ็ตข้อมูล</button>
+        <button id="downloadButton">ดาวน์โหลดข้อมูลเป็น Excel</button>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="script.js"></script>
 
 </body>
