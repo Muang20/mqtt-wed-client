@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อมูลจาก MQTT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1E3A5F;
+            color: white;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .status-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .connected {
+            background-color: green;
+        }
+        .disconnected {
+            background-color: red;
+        }
+        .data-container {
+            padding: 20px;
+            background-color: #007ACC;
+            border-radius: 10px;
+            width: 80%;
+            margin: 0 auto;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ข้อมูลจาก MQTT</h1>
+
+    <div class="status">
+        <div id="brokerStatus" class="status-indicator disconnected"></div>
+        <span id="brokerText">Connecting to MQTT broker...</span>
+    </div>
+
+    <div class="status">
+        <div id="topicStatus" class="status-indicator disconnected"></div>
+        <span id="topicText">Subscribing to topic TestMuang/#...</span>
+    </div>
+
+    <div class="data-container">
+        <h2>Received Data:</h2>
+        <div id="mqtt-data"></div>
+    </div>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
