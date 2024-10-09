@@ -11,34 +11,8 @@
             color: white;
             text-align: center;
         }
-        h1 {
-            font-size: 2em;
-        }
-        .status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .status-indicator {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .connected {
-            background-color: green;
-        }
-        .disconnected {
-            background-color: red;
-        }
         .data-container {
-            padding: 20px;
-            background-color: #007ACC;
-            border-radius: 10px;
-            width: 80%;
-            margin: 0 auto;
-            color: white;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -46,23 +20,24 @@
 
     <h1>ข้อมูลจาก MQTT</h1>
 
-    <div class="status">
-        <div id="brokerStatus" class="status-indicator disconnected"></div>
-        <span id="brokerText">Connecting to MQTT broker...</span>
-    </div>
-
-    <div class="status">
-        <div id="topicStatus" class="status-indicator disconnected"></div>
-        <span id="topicText">Subscribing to topic TestMuang/#...</span>
-    </div>
-
     <div class="data-container">
-        <h2>Received Data:</h2>
-        <div id="mqtt-data"></div>
+        <h3>เวลา: <span id="mqttTime">N/A</span></h3>
+        <h3>Net Radiation: <span id="mqttNetRadiation">N/A</span></h3>
+        <h3>ค่า ETo: <span id="mqttETo">N/A</span></h3>
     </div>
 
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // ดึงข้อมูลจาก LocalStorage
+        const storedData = JSON.parse(localStorage.getItem('mqttData'));
+
+        if (storedData) {
+            document.getElementById('mqttTime').innerText = storedData.time;
+            document.getElementById('mqttNetRadiation').innerText = storedData.netRadiation;
+            document.getElementById('mqttETo').innerText = storedData.etoValue;
+        } else {
+            console.log('No data found in LocalStorage');
+        }
+    </script>
 
 </body>
 </html>
