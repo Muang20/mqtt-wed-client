@@ -26,18 +26,7 @@
         <h3>ค่า ETo: <span id="mqttETo">N/A</span></h3>
     </div>
 
-    <script>
-        // ดึงข้อมูลจาก LocalStorage
-        const storedData = JSON.parse(localStorage.getItem('mqttData'));
-
-        if (storedData) {
-            document.getElementById('mqttTime').innerText = storedData.time;
-            document.getElementById('mqttNetRadiation').innerText = storedData.netRadiation;
-            document.getElementById('mqttETo').innerText = storedData.etoValue;
-        } else {
-            console.log('No data found in LocalStorage');
-        }
-    </script>
+    <script src="script.js"></script>
 
 </body>
 </html>
