@@ -112,16 +112,3 @@ function fetchWeatherData(city) {
 if (document.title === 'ค่า ETo') {
     fetchWeatherData('Danchang');
 }
-
-// ดึงข้อมูลจาก LocalStorage สำหรับหน้า mqtt.html
-if (document.title === 'ข้อมูลจาก MQTT') {
-    const storedData = JSON.parse(localStorage.getItem('mqttData'));
-
-    if (storedData) {
-        document.getElementById('mqttTime').innerText = storedData.time;
-        document.getElementById('mqttNetRadiation').innerText = storedData.netRadiation;
-        document.getElementById('mqttETo').innerText = storedData.etoValue;
-    } else {
-        console.log('No data found in LocalStorage');
-    }
-}
