@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อมูลจาก MQTT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1E3A5F;
+            color: white;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid white;
+            padding: 10px;
+        }
+        th {
+            background-color: #007ACC;
+        }
+        td {
+            background-color: #004080;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ข้อมูลจาก MQTT</h1>
+    
+    <table id="mqttTable">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>MQTT Value</th>
+                <th>ETo (มม./วัน)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data from MQTT will be appended here -->
+        </tbody>
+    </table>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="mqtt_data_script.js"></script>
+
+</body>
+</html>
