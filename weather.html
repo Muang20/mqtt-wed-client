@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อมูลสภาพอากาศ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1E3A5F;
+            color: white;
+            text-align: center;
+        }
+        .weather-container {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #007ACC;
+            border-radius: 10px;
+            width: 80%;
+        }
+        .weather-item {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>ข้อมูลสภาพอากาศ</h1>
+    <div class="weather-container">
+        <div class="weather-item">อุณหภูมิ: <span id="temperature">N/A</span>°C</div>
+        <div class="weather-item">ความชื้น: <span id="humidity">N/A</span>%</div>
+        <div class="weather-item">ความเร็วลม: <span id="windSpeed">N/A</span> m/s</div>
+        <div class="weather-item">ข้อมูลล่าสุด: <span id="lastUpdated">N/A</span></div>
+    </div>
+    <script src="weather.js"></script>
+</body>
+</html>
